@@ -10,7 +10,6 @@ app.use(express.urlencoded())
 app.use(express.json())
 
 app.io.route('login', function(req){
-    console.dir(req.data);
     var thisConnection = mysql.createConnection({
         socketPath: "/var/run/mysqld/mysqld.sock",
         user: req.data.username,
@@ -143,7 +142,6 @@ app.get('/get_table_pages/:current_table', function(req, res){
 });
 
 app.post('/update_table/:current_table', function(req, res){
-    console.dir(req.body);
     thisConnection = connection_obj[req.body.socket_id];
     var query = "UPDATE " + mysql.escapeId(req.params.current_table) + "\nSET ";
     query += mysql.escapeId(req.body.columns[parseInt(req.body.column)]) + "=" + thisConnection.escape(req.body.value)
@@ -152,9 +150,7 @@ app.post('/update_table/:current_table', function(req, res){
         query += mysql.escapeId(req.body.columns[i]) + "=" + thisConnection.escape(req.body.row_vals[i]) + " AND "
     }
     query = query.slice(0, -5);
-    console.log(query);
     thisConnection.query(query, function(err, rows){
-        console.dir(err);
         if(err) res.send(err);
 
         res.send(req.body.value);
