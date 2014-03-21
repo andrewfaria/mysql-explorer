@@ -29,7 +29,7 @@ $(document).ready(function(){
         console.log(data);
         var tablediv = $('#table_chooser');
         $('#table_holder').html('');
-        $('#table_holder').append('<table id="selected_table">');
+        $('#table_holder').append('<table id="selected_table" class="table table-striped table-bordered">');
         tablediv.html('');
         for(var i in data){
             var tablebutton = $('<div>' + data[i]['Tables_in_' + current_db] + '</div>');
@@ -55,7 +55,10 @@ $(document).ready(function(){
             fnDrawCallback: function( oSettings ){
                 var oldVal = '';
                 $('td', datTable.fnGetNodes()).on('click', function(){
-                    oldVal = $(this).text();
+                    if($(this).text() != "Click to edit")
+                        oldVal = $(this).text();
+                    else
+                        oldVal = "&nbsp;";
                 });
                 $('td', datTable.fnGetNodes()).editable('/update_table/' + current_table, {
                     "callback": function( sValue, y ) {
@@ -70,7 +73,10 @@ $(document).ready(function(){
                     "submitdata": function ( value, settings ) {
                         var row_vals = []
                         $(this).parent().find('td').each(function(){
-                            row_vals.push($(this).text());
+                            if($(this).text() != "Click to edit")
+                                row_vals.push($(this).text());
+                            else
+                                row_vals.push("&nbsp;");
                         });
                         row_vals[datTable.fnGetPosition( this )[2]] = oldVal;
                         return {
@@ -80,7 +86,8 @@ $(document).ready(function(){
                             "row_vals": row_vals
                         };
                     },
-                    onblur : "submit"
+                    onblur : "submit",
+                    height: "100%"
                 });
             }
         });
@@ -89,7 +96,7 @@ $(document).ready(function(){
     io.on('table_switched', function(data){
         console.log(data);
         $('#table_holder').html('');
-        $('#table_holder').append('<table id="selected_table">');
+        $('#table_holder').append('<table id="selected_table" class="table table-striped table-bordered">');
         thead =$('<thead>')
         thead.append('<tr>');
         var first = true;
