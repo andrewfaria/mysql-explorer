@@ -28,7 +28,8 @@ $(document).ready(function(){
     io.on('db_switched', function(data){
         console.log(data);
         var tablediv = $('#table_chooser');
-        $('#selected_table').html('');
+        $('#table_holder').html('');
+        $('#table_holder').append('<table id="selected_table">');
         tablediv.html('');
         for(var i in data){
             var tablebutton = $('<div>' + data[i]['Tables_in_' + current_db] + '</div>');
@@ -40,27 +41,73 @@ $(document).ready(function(){
         }
     });
 
+    function switch_table(){
+        var datTable = $('#selected_table').dataTable({
+            //"sDom": "<'row'<'col-xs-6'T><'col-xs-6'f>r>t<'row'<'col-xs-6'i><'col-xs-6'p>>",
+            "bProcessing": true,
+            "bServerSide": true,
+            "bLengthChange": true,
+            "sAjaxSource": "/get_table_pages/" + current_table,
+            fnServerParams: function( aoData ){
+                aoData.push({"name":  "columns", "value": current_cols});
+                aoData.push({"name":  "socket_id", "value": io.socket.sessionid});
+            },
+            fnDrawCallback: function( oSettings ){
+                var oldVal = '';
+                $('td', datTable.fnGetNodes()).on('click', function(){
+                    oldVal = $(this).text();
+                });
+                $('td', datTable.fnGetNodes()).editable('/update_table/' + current_table, {
+                    "callback": function( sValue, y ) {
+                        try{
+                            sValue = JSON.parse(sValue);
+                            console.log(sValue);
+                        } catch(e) {
+                            var aPos = datTable.fnGetPosition( this );
+                            datTable.fnUpdate( sValue, aPos[0], aPos[1] );
+                        }
+                    },
+                    "submitdata": function ( value, settings ) {
+                        var row_vals = []
+                        $(this).parent().find('td').each(function(){
+                            row_vals.push($(this).text());
+                        });
+                        row_vals[datTable.fnGetPosition( this )[2]] = oldVal;
+                        return {
+                            "columns": current_cols,
+                            "socket_id": io.socket.sessionid,
+                            "column" : datTable.fnGetPosition( this )[2],
+                            "row_vals": row_vals
+                        };
+                    },
+                    onblur : "submit"
+                });
+            }
+        });
+    }
+
     io.on('table_switched', function(data){
         console.log(data);
-        $('#selected_table').html('');
+        $('#table_holder').html('');
+        $('#table_holder').append('<table id="selected_table">');
         thead =$('<thead>')
         thead.append('<tr>');
         var first = true;
         tbody = $('<tbody>');
+        current_cols = [];
         for( var i in data){
-            var tbodyrow = $('<tr>');
             for( var j in data[i]){
                 if(first){
                     thead.find('tr').append('<th>' + j + '</th>');
+                    current_cols.push(j);
                 }
-                tbodyrow.append('<td>' + data[i][j] + '</td>');
             }
-            tbody.append(tbodyrow);
             first = false;
         }
         $('#selected_table').append('<caption>' + current_table + '</caption>');
         $('#selected_table').append(thead);
         $('#selected_table').append(tbody);
+        switch_table();
     });
 
     io.on('error', function(err){

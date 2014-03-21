@@ -7,6 +7,8 @@
 #table_chooser {
   border: 1px solid black;
   float: left;
+  padding: 0px;
+  overflow-x: hidden;
 }
 
 #table_chooser > div {
@@ -19,6 +21,9 @@
   padding: 10px;
 }
 
+#selected_table {
+  width: 100%;
+}
 #selected_table > tbody > tr > td {
   padding: 5px;
   border: 1px solid grey;
