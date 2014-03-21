@@ -1,0 +1,30 @@
+#database_chooser > div {
+  display: inline-block;
+  padding: 5px;
+  border: 1px solid black;
+}
+
+#table_chooser {
+  border: 1px solid black;
+  float: left;
+}
+
+#table_chooser > div {
+  padding: 5px;
+  border: 1px solid black;
+}
+
+#table_holder {
+  float: left;
+  padding: 10px;
+}
+
+#selected_table > tbody > tr > td {
+  padding: 5px;
+  border: 1px solid grey;
+}
+
+#selected_table > caption {
+  font-size: 1.5em;
+  font-weight: bold;
+}

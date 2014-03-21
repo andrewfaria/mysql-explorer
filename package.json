@@ -1,0 +1,17 @@
+{
+  "name": "mysql-explorer",
+  "version": "0.0.0",
+  "description": "",
+  "main": "server.js",
+  "dependencies": {
+    "express.io": "~1.1.13",
+    "mysql": "~2.1.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "author": "",
+  "license": "ISC"
+}

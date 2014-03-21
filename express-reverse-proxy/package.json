@@ -1,0 +1,20 @@
+{
+  "name": "express-reverse-proxy",
+  "version": "0.0.1",
+  "description": "Simple Reverse Proxying with Express",
+  "main": "main.js",
+  "dependencies": {
+    "request": "~2.34.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "express",
+    "reverse",
+    "proxy"
+  ],
+  "author": "Matthew Madonna",
+  "license": "ISC"
+}
