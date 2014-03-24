@@ -53,7 +53,7 @@ $(document).ready(function(){
                 aoData.push({"name":  "socket_id", "value": io.socket.sessionid});
             },
             fnDrawCallback: function( oSettings ){
-                var oldVal = '';
+                var oldVal = '&nbsp';
                 $('td', datTable.fnGetNodes()).on('click', function(){
                     if($(this).text() != "Click to edit")
                         oldVal = $(this).text();
